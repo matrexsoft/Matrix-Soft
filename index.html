@@ -474,6 +474,159 @@
             .hero h1 { font-size: 28px; }
             .hero p { font-size: 15px; }
         }
+        /* تنسيقات الشاشة المنبثقة - Modal */
+.modal-overlay {
+    display: none; /* مخفية افتراضياً */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6); /* خلفية داكنة شفافة */
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: var(--white);
+    width: 100%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 30px;
+    position: relative;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-modal:hover {
+    color: #ef4444;
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 15px;
+}
+
+.modal-header h3 {
+    color: var(--primary-dark);
+    font-weight: 800;
+    font-size: 22px;
+}
+
+.modal-header p {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* تنسيق الحقول داخل النموذج */
+.form-group {
+    margin-bottom: 18px;
+    text-align: right;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--secondary);
+}
+
+.required-star {
+    color: #ef4444;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-dark);
+    background-color: #f8fafc;
+    transition: var(--transition);
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.15);
+}
+
+.disabled-input {
+    background-color: #e2e8f0;
+    color: #64748b;
+    cursor: not-allowed;
+    font-weight: bold;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+.conditional-fields {
+    background: #f0f7fc;
+    padding: 15px;
+    border-radius: 8px;
+    border-right: 4px solid var(--primary);
+    margin-bottom: 18px;
+    display: none; /* مخفي ويظهر بالجافاسكريبت */
+}
+
+/* زر الإرسال للواتساب */
+.modal-submit-btn {
+    width: 100%;
+    background: #25D366;
+    color: var(--white);
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    transition: var(--transition);
+    margin-top: 10px;
+}
+
+.modal-submit-btn:hover {
+    background: #20ba5a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+}
     </style>
 </head>
 <body>
@@ -490,7 +643,7 @@
                 <li><a href="#inventory">المخازن</a></li>
                 <li><a href="#sales">المبيعات</a></li>
                 <li><a href="#hr">الموظفين</a></li>
-                <li><a href="https://wa.me/967779617470" class="cta-btn" target="_blank">طلب نسخة تجريبية</a></li>
+               <li><a href="#" class="cta-btn" id="openTrialModal">طلب نسخة تجريبية</a></li>
             </ul>
         </div>
     </header>
@@ -734,5 +887,153 @@
         </div>
     </footer>
 
+<div id="trialModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-header">
+            <h3>📋 نموذج طلب نسخة تجريبية</h3>
+            <p>نظام ماتريكس سوفت المحاسبي والإداري</p>
+        </div>
+        
+        <form id="trialForm">
+            <div class="form-group">
+                <label>نوع الطلب</label>
+                <input type="text" value="طلب نسخة تجريبية" disabled class="form-control disabled-input">
+            </div>
+
+            <div class="form-group">
+                <label>الاسم الكامل <span class="required-star">*</span></label>
+                <input type="text" id="fullName" required placeholder="الرجاء كتابة اسمك الكامل" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>الغرض من النسخة التجريبية <span class="required-star">*</span></label>
+                <select id="purpose" required class="form-control">
+                    <option value="" disabled selected>اختر الغرض...</option>
+                    <option value="تركيب">التركيب لنشاط تجاري (عميل)</option>
+                    <option value="تدريب">التدريب (متدرب)</option>
+                </select>
+            </div>
+
+            <div id="businessFields" class="conditional-fields">
+                <div class="form-group">
+                    <label>اسم النشاط التجاري <span class="required-star">*</span></label>
+                    <input type="text" id="businessName" placeholder="مثال: شركة، محلات، مصنع..." class="form-control">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>عدد الفروع <span class="required-star">*</span></label>
+                        <input type="number" id="branchesCount" min="1" placeholder="أدخل عدد الفروع" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>العنوان الحالي <span class="required-star">*</span></label>
+                        <input type="text" id="address" placeholder="المدينة - الشارع" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>النظام المطلوب تجريبُه <span class="required-star">*</span></label>
+                <select id="systemType" required class="form-control">
+                    <option value="" disabled selected>اختر النظام المحاسبي...</option>
+                    <option value="نظام حسابات ومخزون">نظام حسابات ومخزون</option>
+                    <option value="شؤون موظفين">شؤون موظفين</option>
+                    <option value="النظام المحاسبي العام">النظام المحاسبي العام</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>رقم هاتف الواتساب <span class="required-star">*</span></label>
+                    <input type="tel" id="whatsappNum" required placeholder="مثال: 779617470" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>رقم الاتصال المباشر <span class="required-star">*</span></label>
+                    <input type="tel" id="contactNum" required placeholder="مثال: 734468805" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>ملاحظات إضافية (اختياري)</label>
+                <textarea id="notes" rows="2" placeholder="أي تفاصيل أو متطلبات خاصة تريد إطلاعنا عليها..." class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="modal-submit-btn">🟢 إرسال الطلب عبر الواتساب</button>
+        </form>
+    </div>
+</div>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // عناصر الشاشة المنبثقة
+            const modal = document.getElementById("trialModal");
+            const openBtn = document.getElementById("openTrialModal");
+            const closeBtn = document.querySelector(".close-modal");
+            const purposeSelect = document.getElementById("purpose");
+            const businessFields = document.getElementById("businessFields");
+            const trialForm = document.getElementById("trialForm");
+
+            // حقول النشاط التجاري
+            const bName = document.getElementById("businessName");
+            const bCount = document.getElementById("branchesCount");
+            const bAddr = document.getElementById("address");
+
+            // فتح وإغلاق
+            openBtn.addEventListener("click", (e) => { e.preventDefault(); modal.style.display = "flex"; });
+            closeBtn.addEventListener("click", () => { modal.style.display = "none"; });
+            window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+
+            // التحكم الذكي في الحقول
+            purposeSelect.addEventListener("change", function() {
+                if (this.value === "تركيب") {
+                    businessFields.style.display = "block";
+                    bName.required = true; bCount.required = true; bAddr.required = true;
+                } else {
+                    businessFields.style.display = "none";
+                    bName.required = false; bCount.required = false; bAddr.required = false;
+                    bName.value = ""; bCount.value = ""; bAddr.value = "";
+                }
+            });
+
+            // معالجة البيانات وبناء رسالة الواتساب
+            trialForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+
+                const fullName = document.getElementById("fullName").value;
+                const purposeText = purposeSelect.value === "تركيب" ? "التركيب لنشاط تجاري (عميل)" : "التدريب (متدرب)";
+                const systemType = document.getElementById("systemType").value;
+                const whatsappNum = document.getElementById("whatsappNum").value;
+                const contactNum = document.getElementById("contactNum").value;
+                const notes = document.getElementById("notes").value.trim() || "لا توجد ملاحظات";
+
+                let businessDetails = "";
+                if (purposeSelect.value === "تركيب") {
+                    businessDetails = `🔹 *اسم النشاط:* ${bName.value}\n🔹 *عدد الفروع:* ${bCount.value}\n🔹 *العنوان:* ${bAddr.value}\n`;
+                }
+
+                const message = 
+`*طلب نسخة تجريبية جديدة (Matrix Soft)* 🚀
+
+📌 *نوع الطلب:* طلب نسخة تجريبية
+👤 *اسم العميل:* ${fullName}
+🎯 *الغرض من النسخة:* ${purposeText}
+💻 *النظام المطلوب:* ${systemType}
+
+${businessDetails}📞 *رقم الواتساب:* ${whatsappNum}
+☎️ *رقم الاتصال:* ${contactNum}
+📝 *ملاحظات:* ${notes}
+
+_تم إرسال هذا الطلب تلقائياً عبر الموقع التعريفي للمنظومة_`;
+
+                // رقم هاتفك
+                const myPhoneNumber = "967779617470"; 
+                const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+
+                modal.style.display = "none";
+                trialForm.reset();
+                businessFields.style.display = "none";
+            });
+        });
+    </script>
 </body>
 </html> 
