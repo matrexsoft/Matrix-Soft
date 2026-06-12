@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام ماتريكس سوفت المحاسبي والإداري | MatrixSoft ERP</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+
+        :root {
+            --primary: #4682B4; /* SteelBlue */
+            --primary-dark: #2b587a;
+            --primary-light: #eef5fc;
+            --secondary: #1e293b; /* Slate Dark */
+            --bg-smoke: #F5F5F5; /* WhiteSmoke */
+            --white: #ffffff;
+            --accent: #10b981; /* Emerald Accent */
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-smoke);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Header & Navbar */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-logo img {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 15px;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-btn {
+            background: var(--primary);
+            color: var(--white) !important;
+            padding: 8px 20px !important;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(70, 130, 180, 0.3);
+        }
+
+        .cta-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(70, 130, 180, 0.4);
+        }
+
+        .cta-btn::after {
+            display: none !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 20px 80px;
+            background: linear-gradient(135deg, var(--white) 0%, #eef6fc 100%);
+            position: relative;
+            text-align: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-smoke);
+            clip-path: polygon(0 100%, 100% 100%, 100% 0);
+        }
+
+        .hero-badge {
+            background: rgba(70, 130, 180, 0.1);
+            color: var(--primary-dark);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(70, 130, 180, 0.15);
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 35px;
+        }
+
+        .hero-mockup {
+            max-width: 950px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 4px solid var(--white);
+            overflow: hidden;
+            background: var(--white);
+            transition: var(--transition);
+        }
+
+        .hero-mockup:hover {
+            transform: scale(1.01);
+        }
+
+        .hero-mockup img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--secondary);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .section-header h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 30px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(70, 130, 180, 0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Modules & Showcases */
+        .showcase-section {
+            background: var(--white);
+            padding: 80px 0;
+            border-top: 1px solid rgba(0,0,0,0.03);
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .showcase-section:nth-of-type(even) {
+            background: var(--bg-smoke);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .screen-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.06);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .screen-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .screen-img-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            background: #eaeaea;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .screen-img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .screen-card:hover .screen-img-container img {
+            transform: scale(1.03);
+        }
+
+        .screen-info {
+            padding: 20px;
+        }
+
+        .screen-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .screen-info p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Centered Block for solitary long reports */
+        .center-block {
+            max-width: 700px;
+            margin: 40px auto 0;
+        }
+
+        /* Footer & Contact styling */
+        footer {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 40px 20px 12px;
+            position: relative;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 20px;
+        }
+
+        .footer-about h3, .footer-contact h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .footer-about h3::after, .footer-contact h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .footer-about p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: #94a3b8;
+            font-size: 15px;
+        }
+
+        .footer-contact-item svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-link svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--white);
+            transition: var(--transition);
+        }
+
+        /* Brand Colors on Hover */
+        .social-link.facebook:hover { background: #1877F2; transform: translateY(-3px); }
+        .social-link.youtube:hover { background: #FF0000; transform: translateY(-3px); }
+        .social-link.instagram:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); transform: translateY(-3px); }
+        .social-link.whatsapp:hover { background: #25D366; transform: translateY(-3px); }
+
+        .copyright {
+            text-align: center;
+            padding-top: 12px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" class="brand-logo">
+                <img src="MatrIxSoft_Brochure/logo.png" alt="MatrixSoft">
+                <span class="brand-name">MatrIx Soft</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">المميزات</a></li>
+                <li><a href="#accounts">الحسابات</a></li>
+                <li><a href="#inventory">المخازن</a></li>
+                <li><a href="#sales">المبيعات</a></li>
+                <li><a href="#hr">الموظفين</a></li>
+                <li><a href="https://wa.me/967779617470" class="cta-btn" target="_blank">طلب نسخة تجريبية</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-badge">إصدار بلس المتكامل الذكي لعام 2026</div>
+        <h1>إدارة أعمالك بثقة مع نظام MatrIx Soft</h1>
+        <p>الحل المحاسبي والإداري الشامل المصمم خصيصاً لتلبية طموحات وتطلعات مشروعك التجاري، وربط كافة الفروع والمستودعات بكل سلاسة وأمان.</p>
+        <div class="hero-mockup">
+            <img src="MatrIxSoft_Brochure/01-الواجهة الرئيسية.png" alt="الواجهة الرئيسية للنظام">
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2>لماذا يفضل أصحاب الأعمال MatrIx Soft؟</h2>
+            <p>مجموعة أدوات ذكية ومترابطة تم بناؤها لتوفير الوقت والحد من الأخطاء المالية البشرية.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>أمان وثبات عالٍ</h3>
+                <p>قواعد بيانات متينة تضمن حماية البيانات مع دعم كامل للنسخ الاحتياطي التلقائي والمتعدد.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>سرعة فائقة وسهولة</h3>
+                <p>واجهات مستخدم متطورة ومريحة للعين، مدمجة باختصارات لوحة المفاتيح لتسريع عمليات البيع.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>تقارير ختامية ذكية</h3>
+                <p>استخراج فوري لقوائم الدخل والأرباح والخسائر وحركة الأصناف بدقة متناهية وبضغطة زر.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>دعم الشبكات والفروع</h3>
+                <p>إمكانية العمل على شبكة محلية أو ربط فروع متعددة لتتبع أعمالك أينما كنت وفي أي وقت.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase-section" id="accounts">
+        <div class="container">
+            <div class="section-header">
+                <h2>1. إدارة الحسابات والقيود المالية</h2>
+                <p>تحكم كامل بهيكلك المالي وشجرتك المحاسبية مع تتبع القيود واستخراج كشوفات الحسابات التفصيلية.</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/02-دليل الحسابات.png" alt="دليل الحسابات"></div>
+                    <div class="screen-info">
+                        <h3>دليل الحسابات (شجرة الحسابات)</h3>
+                        <p>بناء مرن ومتعدد المستويات لكافة الأصول، الخصوم، المصاريف والإيرادات مع سهولة التعديل والإضافة.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/03-القيود اليومية.png" alt="القيود اليومية"></div>
+                    <div class="screen-info">
+                        <h3>شاشة القيود اليومية</h3>
+                        <p>إدخال ومراجعة القيود المحاسبية اليدوية والآلية بكل توازن ودقة للتأكد من سلامة المعاملات.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/04-كشف الحساب.png" alt="كشف الحساب"></div>
+                    <div class="screen-info">
+                        <h3>كشف الحساب التفصيلي</h3>
+                        <p>استعراض فوري لكشوفات حسابات العملاء، الموردين، والصناديق مع فلاتر مخصصة وتصدير مرن.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/05-قائمة الدخل.png" alt="قائمة الدخل"></div>
+                    <div class="screen-info">
+                        <h3>تقرير قائمة الدخل</h3>
+                        <p>المرآة الحقيقية لأداء منشأتك؛ تلخص الإيرادات والمصروفات لتوضح صافي أرباحك التشغيلية بصورة آلية.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase-section" id="inventory">
+        <div class="container">
+            <div class="section-header">
+                <h2>2. إدارة المخزون والمستودعات الذكية</h2>
+                <p>تتبع دقيق لكميات الأصناف، تكلفتها، وتواريخ صلاحيتها لتفادي أي هدر أو نقص غير متوقع.</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/06-دليل الأصناف.png" alt="دليل الأصناف"></div>
+                    <div class="screen-info">
+                        <h3>دليل وترميز الأصناف</h3>
+                        <p>تنظيم البضائع في مجموعات، وتوليد الباركود، وتحديد الأسعار (جملة - تجزئة) والحد الأدنى للمخزون.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/07-أرصدة الأصناف.png" alt="أرصدة الأصناف"></div>
+                    <div class="screen-info">
+                        <h3>أرصدة وكميات الأصناف</h3>
+                        <p>جرد ومراقبة آنية لكافة كميات البضائع المتوفرة داخل مخازن ومستودعات منشأتك بصورة دقيقة.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/08-حركة الصنف.png" alt="حركة الصنف"></div>
+                    <div class="screen-info">
+                        <h3>تتبع حركة الصنف</h3>
+                        <p>تقرير تفصيلي يوضح الوارد والصادر لكل قطعة مخزنية لمعرفة الأصناف الأكثر والأقل مبيعاً وطبيعة حركتها.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/09-تقرير تواريخ الانتهاء.png" alt="تقرير تواريخ الانتهاء"></div>
+                    <div class="screen-info">
+                        <h3>تقرير تواريخ الانتهاء والصلاحية</h3>
+                        <p>منظومة إنذار مبكر للأصناف والمواد التي تقترب تواريخ صلاحيتها من الانتهاء لحماية رأس مالك.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase-section" id="sales">
+        <div class="container">
+            <div class="section-header">
+                <h2>3. المبيعات، المشتريات وتقارير الأرباح</h2>
+                <p>دورة مستندية متكاملة تبدأ من الفواتير وتمر بالمرتجعات وتنتهي بتحليل الربحية الحقيقية للمواد.</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/10-فاتورة المشتريات.png" alt="فاتورة المشتريات"></div>
+                    <div class="screen-info">
+                        <h3>فاتورة المشتريات والموردين</h3>
+                        <p>إثبات المشتريات النقدية والآجلة، وتحديث كميات المخازن فوراً وتعديل متوسط تكلفة الصنف تلقائياً.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/11-تقرير المشتريات.png" alt="تقرير المشتريات"></div>
+                    <div class="screen-info">
+                        <h3>تقارير وتحليلات المشتريات</h3>
+                        <p>مراجعة حجم التعاملات مع الموردين ومعرفة إجمالي قيمة المشتريات خلال أي فترة زمنية محددة.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/12-فاتورة المبيعات.png" alt="فاتورة المبيعات"></div>
+                    <div class="screen-info">
+                        <h3>شاشة فاتورة المبيعات</h3>
+                        <p>واجهة بيع سريعة تدعم قارئ الباركود، الخصومات المباشرة، وطرق الدفع المتنوعة (نقداً، آجل، شبكة).</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/13-تقرير المبيعات.png" alt="تقرير المبيعات"></div>
+                    <div class="screen-info">
+                        <h3>تقارير حركة المبيعات</h3>
+                        <p>متابعة حجم المبيعات اليومي أو الدوري، وتتبع أداء موظفي المبيعات والكاشير بكل دقة ومرونة.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screen-card center-block">
+                <div class="screen-img-container"><img src="MatrIxSoft_Brochure/14-تقرير أرباح الأصناف.png" alt="تقرير أرباح الأصناف"></div>
+                <div class="screen-info">
+                    <h3>🏆 تقرير أرباح الأصناف تفصيلياً</h3>
+                    <p>أهم شاشات اتخاذ القرار؛ تظهر لك صافي ربحية كل صنف مباع بناءً على مقارنة سعر البيع بمتوسط التكلفة الحقيقي لتحديد المنتجات الأكثر ربحية لمشروعك.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase-section" id="hr">
+        <div class="container">
+            <div class="section-header">
+                <h2>4. إدارة شؤون الموظفين والمرتبات</h2>
+                <p>تنظيم متكامل للكادر البشري عبر أتمتة ملفاتهم، تتبع حضورهم، وصرف مرتباتهم بدقة وبساطة.</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/15-دليل الموظفين.png" alt="دليل الموظفين"></div>
+                    <div class="screen-info">
+                        <h3>دليل وملفات الموظفين</h3>
+                        <p>قاعدة بيانات شاملة لحفظ الوثائق والبيانات الشخصية، والوظائف والرواتب الأساسية لكل موظف.</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-img-container"><img src="MatrIxSoft_Brochure/16-تقرير الحضور والانصراف.png" alt="تقرير الحضور والانصراف"></div>
+                    <div class="screen-info">
+                        <h3>تقرير مراقبة الحضور والانصراف</h3>
+                        <p>رصد ومراجعة ساعات العمل، الغيابات، التأخيرات، والعمل الإضافي بشكل منظم يسهل الاحتساب المالي.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screen-card center-block">
+                <div class="screen-img-container"><img src="MatrIxSoft_Brochure/17-تقرير المرتبات.png" alt="تقرير المرتبات"></div>
+                <div class="screen-info">
+                    <h3>مسير وتقرير المرتبات الشهرية</h3>
+                    <p>احتساب فوري واستحقاق شهري للمرتبات مع الخصومات، السلف، والإضافيات وترحيلها محاسبياً لقيود الصندوق مباشرة دون عناء.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-about">
+                <h3>MatrIx Soft</h3>
+                <p>نهتم بأدق التفاصيل البرمجية والمحاسبية لنمنحك السيطرة المطلقة على منشأتك بأسلوب عصري وثبات تقني لا مثيل له.</p>
+                <p>طُوِّر خصيصاً ليناسب الأنشطة التجارية والمحلات الكبرى والشركات المتوسطة والصغيرة.</p>
+            </div>
+            <div class="footer-contact">
+                <h3>قنوات التواصل المباشر</h3>
+                <div class="footer-contact-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span>الجمهورية اليمنية - تعز</span>
+                </div>
+                <div class="footer-contact-item">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span>matrexsoft2026@gmail.com</span>
+                </div>
+                <div class="footer-contact-item">
+                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <span>00967734468805</span>
+                </div>
+                
+                <div class="social-icons">
+                    <a href="https://facebook.com/MatrixSoft.erp" class="social-link facebook" target="_blank" title="تابعنا على فيسبوك">
+                        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                    <a href="https://youtube.com/@matrixsoft" class="social-link youtube" target="_blank" title="قناتنا على يوتيوب">
+                        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="https://instagram.com/matrixsoft.erp" class="social-link instagram" target="_blank" title="تابعنا على انستجرام">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                    </a>
+                    <a href="https://wa.me/967779617470" class="social-link whatsapp" target="_blank" title="تحدث معنا عبر واتساب">
+                        <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-3.51c1.6.95 3.16 1.45 4.82 1.45 5.516 0 10.003-4.48 10.006-9.995.002-2.672-1.033-5.184-2.913-7.067C16.372 3.003 13.86 1.964 11.2 1.964c-5.519 0-10.007 4.48-10.01 9.997-.001 1.77.46 3.5 1.34 5.02l-.99 3.62 3.71-.97c1.52.84 3.11 1.28 4.79 1.28zM17.5 14c-.23-.12-1.37-.67-1.58-.75-.21-.08-.36-.12-.51.12-.15.23-.59.75-.73.91-.13.15-.27.17-.5.05-.23-.12-.98-.36-1.87-1.15-.69-.61-1.16-1.37-1.3-1.61-.13-.23-.01-.36.1-.47.11-.1.23-.27.35-.4.11-.13.15-.23.23-.38.08-.15.04-.28-.02-.4-.06-.12-.51-1.23-.7-1.69-.19-.45-.38-.39-.51-.4h-.44c-.15 0-.4.06-.61.28-.21.23-.8 1-.8 2.42 0 1.43 1.04 2.81 1.18 3 .15.19 2.05 3.13 4.96 4.39.69.3 1.23.48 1.65.61.7.22 1.33.19 1.84.11.56-.08 1.7-.69 1.94-1.37.24-.68.24-1.27.17-1.37-.08-.1-.23-.17-.46-.29z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            جميع الحقوق محفوظة © MatrixSoft لعام 2026
+        </div>
+    </footer>
+
+</body>
+</html> 
